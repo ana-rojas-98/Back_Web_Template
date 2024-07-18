@@ -9,5 +9,5 @@ public partial class TbPermiso
 
     public string? Valor { get; set; }
 
-    public virtual ICollection<TbEmpresasPermiso> TbEmpresasPermisos { get; set; } = new List<TbEmpresasPermiso>();
+    public virtual ICollection<TbRolPermiso> TbRolPermisos { get; set; } = new List<TbRolPermiso>();
 }

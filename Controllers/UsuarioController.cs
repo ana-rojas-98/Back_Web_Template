@@ -24,6 +24,7 @@ namespace StrategicviewBack.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TbUsuario>>> GetTbUsuarios()
         {
+    
             return await _context.TbUsuarios.ToListAsync();
         }
 

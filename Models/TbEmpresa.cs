@@ -44,4 +44,10 @@ public partial class TbEmpresa
     public DateOnly? FechaCreacionEmpresa { get; set; }
 
     public virtual ICollection<TbEmpresasPermiso> TbEmpresasPermisos { get; set; } = new List<TbEmpresasPermiso>();
+
+    public virtual ICollection<TbEmpresasUsuario> TbEmpresasUsuarios { get; set; } = new List<TbEmpresasUsuario>();
+
+    public virtual ICollection<TbInformesJd> TbInformesJds { get; set; } = new List<TbInformesJd>();
+
+    public virtual ICollection<TbProyecto> TbProyectos { get; set; } = new List<TbProyecto>();
 }

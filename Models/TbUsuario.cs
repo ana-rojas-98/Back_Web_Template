@@ -33,5 +33,7 @@ public partial class TbUsuario
 
     public virtual TbRole IdUsuarioNavigation { get; set; } = null!;
 
-    public virtual TbRolEmpresaPermiso? TbRolEmpresaPermiso { get; set; }
+    public virtual ICollection<TbEmpresasUsuario> TbEmpresasUsuarios { get; set; } = new List<TbEmpresasUsuario>();
+
+    public virtual ICollection<TbRolPermiso> TbRolPermisos { get; set; } = new List<TbRolPermiso>();
 }

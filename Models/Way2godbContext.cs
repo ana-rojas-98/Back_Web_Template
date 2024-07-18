@@ -21,17 +21,19 @@ public partial class Way2godbContext : DbContext
 
     public virtual DbSet<TbEmpresasPermiso> TbEmpresasPermisos { get; set; }
 
+    public virtual DbSet<TbEmpresasUsuario> TbEmpresasUsuarios { get; set; }
+
+    public virtual DbSet<TbInformesJd> TbInformesJds { get; set; }
+
     public virtual DbSet<TbPermiso> TbPermisos { get; set; }
 
     public virtual DbSet<TbProyecto> TbProyectos { get; set; }
 
-    public virtual DbSet<TbRolEmpresaPermiso> TbRolEmpresaPermisos { get; set; }
+    public virtual DbSet<TbRolPermiso> TbRolPermisos { get; set; }
 
     public virtual DbSet<TbRole> TbRoles { get; set; }
 
     public virtual DbSet<TbUsuario> TbUsuarios { get; set; }
-
-    public virtual DbSet<TdInformesJd> TdInformesJds { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -55,6 +57,8 @@ public partial class Way2godbContext : DbContext
         modelBuilder.Entity<TbEmpresa>(entity =>
         {
             entity.HasKey(e => e.IdEmpresa).HasName("PK_Tb_Empresas");
+
+            entity.ToTable("TbEmpresas", "administracion");
 
             entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
             entity.Property(e => e.ApellidoGerente)
@@ -117,22 +121,78 @@ public partial class Way2godbContext : DbContext
         {
             entity.HasKey(e => e.IdEmpresapermiso);
 
+            entity.ToTable("TbEmpresasPermisos", "seguridad");
+
             entity.Property(e => e.IdEmpresapermiso).HasColumnName("id_empresapermiso");
             entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
             entity.Property(e => e.IdPermiso).HasColumnName("id_permiso");
 
             entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.TbEmpresasPermisos)
                 .HasForeignKey(d => d.IdEmpresa)
-                .HasConstraintName("id_empresa");
+                .HasConstraintName("FK_TbEmpresas_TbEmpresasPermisos_id_empresa");
+        });
 
-            entity.HasOne(d => d.IdPermisoNavigation).WithMany(p => p.TbEmpresasPermisos)
-                .HasForeignKey(d => d.IdPermiso)
-                .HasConstraintName("id_permiso");
+        modelBuilder.Entity<TbEmpresasUsuario>(entity =>
+        {
+            entity.HasKey(e => e.IdEmpresasusuarios);
+
+            entity.ToTable("TbEmpresasUsuarios", "seguridad");
+
+            entity.Property(e => e.IdEmpresasusuarios)
+                .ValueGeneratedNever()
+                .HasColumnName("id_empresasusuarios");
+            entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.TbEmpresasUsuarios)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_TbEmpresas_TbEmpresasUsuarios_id_empresa");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TbEmpresasUsuarios)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("FK_TbUsuarios_TbEmpresasUsuarios_id_usuario");
+        });
+
+        modelBuilder.Entity<TbInformesJd>(entity =>
+        {
+            entity.HasKey(e => e.IdInforme).HasName("PK_NewTable");
+
+            entity.ToTable("TbInformesJD", "administracion");
+
+            entity.Property(e => e.IdInforme)
+                .ValueGeneratedNever()
+                .HasColumnName("id_informe");
+            entity.Property(e => e.Estado)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("estado");
+            entity.Property(e => e.Etapa)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("etapa");
+            entity.Property(e => e.FechaEntrega).HasColumnName("fecha_entrega");
+            entity.Property(e => e.FechaJunta).HasColumnName("fecha_junta");
+            entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
+            entity.Property(e => e.PorcentajeCumplimiento).HasColumnName("porcentaje_cumplimiento");
+            entity.Property(e => e.Responsable)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("responsable");
+            entity.Property(e => e.TituloInforme)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("titulo_informe");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.TbInformesJds)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_TbEmpresas_TbInformesJD_id_empresa");
         });
 
         modelBuilder.Entity<TbPermiso>(entity =>
         {
             entity.HasKey(e => e.IdPermiso).HasName("PK_Tb_Permisos");
+
+            entity.ToTable("TbPermisos", "seguridad");
 
             entity.Property(e => e.IdPermiso).HasColumnName("id_permiso");
             entity.Property(e => e.Valor)
@@ -144,6 +204,8 @@ public partial class Way2godbContext : DbContext
         modelBuilder.Entity<TbProyecto>(entity =>
         {
             entity.HasKey(e => e.IdProyecto).HasName("PK_TbEmpresas");
+
+            entity.ToTable("TbProyectos", "administracion");
 
             entity.Property(e => e.IdProyecto).HasColumnName("id_proyecto");
             entity.Property(e => e.Cliente)
@@ -169,32 +231,36 @@ public partial class Way2godbContext : DbContext
                 .HasMaxLength(200)
                 .IsUnicode(false)
                 .HasColumnName("vertical_negocio");
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.TbProyectos)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_TbEmpresas_TbProyectos_id_empresa");
         });
 
-        modelBuilder.Entity<TbRolEmpresaPermiso>(entity =>
+        modelBuilder.Entity<TbRolPermiso>(entity =>
         {
-            entity.HasKey(e => e.IdRolempresapermiso);
+            entity.HasKey(e => e.IdRolpermiso).HasName("PK_TbRolEmpresaPermiso");
 
-            entity.ToTable("TbRolEmpresaPermiso");
+            entity.ToTable("TbRolPermiso", "seguridad");
 
-            entity.Property(e => e.IdRolempresapermiso)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id_rolempresapermiso");
-            entity.Property(e => e.IdEmpresapermiso).HasColumnName("id_empresapermiso");
-            entity.Property(e => e.IdUsuario)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("id_usuario");
+            entity.Property(e => e.IdRolpermiso).HasColumnName("id_rolpermiso");
+            entity.Property(e => e.IdPermiso).HasColumnName("id_permiso");
+            entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
 
-            entity.HasOne(d => d.IdRolempresapermisoNavigation).WithOne(p => p.TbRolEmpresaPermiso)
-                .HasForeignKey<TbRolEmpresaPermiso>(d => d.IdRolempresapermiso)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("id_usuario");
+            entity.HasOne(d => d.IdPermisoNavigation).WithMany(p => p.TbRolPermisos)
+                .HasForeignKey(d => d.IdPermiso)
+                .HasConstraintName("FK_TbPermisos_TbRolPermiso_id_permiso");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.TbRolPermisos)
+                .HasForeignKey(d => d.IdUsuario)
+                .HasConstraintName("FK_TbUsuarios_TbRolPermiso_id_usuario");
         });
 
         modelBuilder.Entity<TbRole>(entity =>
         {
             entity.HasKey(e => e.IdRol);
+
+            entity.ToTable("TbRoles", "seguridad");
 
             entity.Property(e => e.IdRol).HasColumnName("id_rol");
             entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
@@ -250,38 +316,7 @@ public partial class Way2godbContext : DbContext
             entity.HasOne(d => d.IdUsuarioNavigation).WithOne(p => p.TbUsuario)
                 .HasForeignKey<TbUsuario>(d => d.IdUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("id_rol");
-        });
-
-        modelBuilder.Entity<TdInformesJd>(entity =>
-        {
-            entity.HasKey(e => e.IdInforme).HasName("PK_NewTable");
-
-            entity.ToTable("TdInformesJD");
-
-            entity.Property(e => e.IdInforme)
-                .ValueGeneratedNever()
-                .HasColumnName("id_informe");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("estado");
-            entity.Property(e => e.Etapa)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("etapa");
-            entity.Property(e => e.FechaEntrega).HasColumnName("fecha_entrega");
-            entity.Property(e => e.FechaJunta).HasColumnName("fecha_junta");
-            entity.Property(e => e.IdEmpresa).HasColumnName("id_empresa");
-            entity.Property(e => e.PorcentajeCumplimiento).HasColumnName("porcentaje_cumplimiento");
-            entity.Property(e => e.Responsable)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("responsable");
-            entity.Property(e => e.TituloInforme)
-                .HasMaxLength(200)
-                .IsUnicode(false)
-                .HasColumnName("titulo_informe");
+                .HasConstraintName("FK_TbRoles__TbUsuarios_id_rol");
         });
 
         modelBuilder.Entity<User>(entity =>

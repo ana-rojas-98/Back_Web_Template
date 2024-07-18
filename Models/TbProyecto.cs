@@ -22,4 +22,6 @@ public partial class TbProyecto
     public DateOnly? FechaInicio { get; set; }
 
     public DateOnly? FechaFinal { get; set; }
+
+    public virtual TbEmpresa? IdEmpresaNavigation { get; set; }
 }

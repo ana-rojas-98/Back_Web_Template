@@ -12,6 +12,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<Way2godbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
@@ -28,5 +40,6 @@ app.UseAuthorization();
 
 // Mapeo de controladores
 app.MapControllers();
+app.UseCors("AllowAllOrigins");
 
 app.Run();
