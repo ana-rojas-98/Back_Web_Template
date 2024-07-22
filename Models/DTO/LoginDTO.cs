@@ -1,6 +1,6 @@
 namespace StrategicviewBack.Models.DTO
 {
-    public class Login
+    public class LoginDTO
     {
         public string Email { get ; set; }
 

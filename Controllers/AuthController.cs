@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StrategicviewBack.Logic;
 using StrategicviewBack.Models;
 using StrategicviewBack.Models.DTO;
 
@@ -10,24 +11,21 @@ namespace StrategicviewBack.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        private readonly Way2godbContext _context;
+        private readonly AuthLogic _logic;
 
-        public AuthController(Way2godbContext context)
+        public AuthController(AuthLogic logic)
         {
-            _context = context;
+            _logic = logic;
         }
 
         // POST: api/Auth
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<TbUsuario>> Postlogin(Login login)
+        public async Task<ActionResult<TbUsuario>> Postlogin(LoginDTO login)
         {
-            var usuario = await _context.TbUsuarios.Where(usuario =>
-                usuario.CorreoElectronico == login.Email &&
-                usuario.Password == login.Password
-            ).FirstOrDefaultAsync();
+            var usuario = await _logic.Authenticate(login);
 
-            return StatusCode(StatusCodes.Status200OK, new { id = usuario.Username, usuario });
+            return StatusCode(StatusCodes.Status200OK, usuario);
         }
 
     }
