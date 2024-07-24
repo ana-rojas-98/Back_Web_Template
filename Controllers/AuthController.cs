@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using StrategicviewBack.Logic;
 using StrategicviewBack.Models;
 using StrategicviewBack.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
+using StrategicviewBack.Utilities; 
 
 namespace StrategicviewBack.Controllers
 {
@@ -26,6 +28,31 @@ namespace StrategicviewBack.Controllers
             var usuario = await _logic.Authenticate(login);
 
             return StatusCode(StatusCodes.Status200OK, usuario);
+        }
+
+
+     
+        [HttpGet("Get-User-Empresas")]
+        [Authorize]
+        public async Task<IActionResult> ObtenerEmpresasUsuario()
+        {
+            var idUser = Convert.ToInt16(HttpContext.User.FindFirst("id_usuario")?.Value);
+
+            var result = await _logic.ObtenerEmpresasUsuario(idUser);
+
+            return StatusCode(StatusCodes.Status200OK, result);
+        }
+
+        [HttpGet("Get-token-Empresa/{idEmpresaRequest}")]
+        [Authorize]
+        public async Task<IActionResult> GetLoginEmpresas(int idEmpresaRequest)
+        {
+
+            var userRequest = UserUtility.GetUserRequestFromClaims(HttpContext);
+
+            var result = await _logic.GetTokenCompany(userRequest, idEmpresaRequest); 
+
+            return StatusCode(StatusCodes.Status200OK, result);
         }
 
     }

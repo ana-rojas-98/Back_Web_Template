@@ -7,7 +7,9 @@ public partial class TbEmpresa
 {
     public int IdEmpresa { get; set; }
 
-    public int? IdIndustria { get; set; }
+    public string? Industria { get; set; }
+
+    public string? NombreEmpresa { get; set; }
 
     public string? Pais { get; set; }
 
@@ -19,7 +21,7 @@ public partial class TbEmpresa
 
     public string? DireccionEmpresa { get; set; }
 
-    public int? TelefonoEmpresa { get; set; }
+    public string? TelefonoEmpresa { get; set; }
 
     public string? CorreoEmpresa { get; set; }
 
@@ -27,7 +29,7 @@ public partial class TbEmpresa
 
     public string? ApellidoGerente { get; set; }
 
-    public int? TelefonoGerente { get; set; }
+    public string? TelefonoGerente { get; set; }
 
     public string? CorreoGerente { get; set; }
 
@@ -35,7 +37,7 @@ public partial class TbEmpresa
 
     public string? ApellidoResponsable { get; set; }
 
-    public int? TelefonoResponsable { get; set; }
+    public string? TelefonoResponsable { get; set; }
 
     public string? CorreoResponsable { get; set; }
 

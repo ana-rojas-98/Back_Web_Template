@@ -11,5 +11,7 @@ public partial class TbRole
 
     public string? Rol { get; set; }
 
-    public virtual TbUsuario? TbUsuario { get; set; }
+    public virtual ICollection<TbRolPermiso> TbRolPermisos { get; set; } = new List<TbRolPermiso>();
+
+    public virtual ICollection<TbUsuario> TbUsuarios { get; set; } = new List<TbUsuario>();
 }

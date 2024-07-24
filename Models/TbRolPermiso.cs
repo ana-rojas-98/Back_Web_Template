@@ -9,9 +9,9 @@ public partial class TbRolPermiso
 
     public int? IdPermiso { get; set; }
 
-    public int? IdUsuario { get; set; }
+    public int? IdRol { get; set; }
 
     public virtual TbPermiso? IdPermisoNavigation { get; set; }
 
-    public virtual TbUsuario? IdUsuarioNavigation { get; set; }
+    public virtual TbRole? IdRolNavigation { get; set; }
 }

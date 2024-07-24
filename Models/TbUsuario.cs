@@ -31,9 +31,7 @@ public partial class TbUsuario
 
     public DateOnly? FechaIngresoEmpresa { get; set; }
 
-    public virtual TbRole IdUsuarioNavigation { get; set; } = null!;
+    public virtual TbRole? IdRolNavigation { get; set; }
 
     public virtual ICollection<TbEmpresasUsuario> TbEmpresasUsuarios { get; set; } = new List<TbEmpresasUsuario>();
-
-    public virtual ICollection<TbRolPermiso> TbRolPermisos { get; set; } = new List<TbRolPermiso>();
 }
