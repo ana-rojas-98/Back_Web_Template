@@ -59,7 +59,7 @@ namespace StrategicviewBack.Logic
 
              if(EmpresasUsuario == null)
               {
-                    return new ResponseModel<UsuarioDTO>(true,true, "El usuario no empresa asignada");
+                    return new ResponseModel<UsuarioDTO>(true,true, "El usuario no tiene empresa asignada");
               }
 
               /// obtener permisos rol 
@@ -172,7 +172,7 @@ namespace StrategicviewBack.Logic
                                where eu.IdUsuario == idUsuario
                                select new EmpresaDTO
                                {
-                                   NombreEmpresa = e.NombreEmpresa,
+                                   Empresa = e.NombreEmpresa,
                                    IdEmpresa = e.IdEmpresa
                                }).ToListAsync();
 
