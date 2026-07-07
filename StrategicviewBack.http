@@ -1,0 +1,22 @@
+@StrategicviewBack_HostAddress = http://localhost:5215
+
+GET {{StrategicviewBack_HostAddress}}/health
+Accept: application/json
+
+###
+
+POST {{StrategicviewBack_HostAddress}}/api/Auth
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123*"
+}
+
+###
+
+GET {{StrategicviewBack_HostAddress}}/api/Auth/Get-User-Companies
+Authorization: Bearer YOUR_TOKEN
+Accept: application/json
+
+###
